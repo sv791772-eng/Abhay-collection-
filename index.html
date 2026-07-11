@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Abhay Collection – Premium Boutique, Dadri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ivory:   #FAF7F2;
+    --black:   #0D0D0D;
+    --gold:    #C9A84C;
+    --gold-lt: #E8D5A3;
+    --blush:   #E8D5C4;
+    --grey:    #8C8C8C;
+    --off:     #F2EDE6;
+    --border:  #DDD5C8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--ivory);
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--ivory); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* ── LOADER ── */
+  #loader {
+    position: fixed; inset: 0; background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999; transition: opacity .6s ease .3s, visibility .6s ease .3s;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-text {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold); font-size: clamp(1.4rem, 4vw, 2.4rem);
+    letter-spacing: .25em; animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  /* ── ANNOUNCEMENT BAR ── */
+  .announcement {
+    background: var(--black); color: var(--gold-lt);
+    text-align: center; padding: 9px 16px;
+    font-size: .72rem; letter-spacing: .18em; font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,247,242,.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(16px, 5vw, 60px);
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px; transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+
+  .nav-logo {
+    display: flex; flex-direction: column; line-height: 1;
+  }
+  .nav-logo .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700; color: var(--black);
+    letter-spacing: .04em;
+  }
+  .nav-logo .tagline {
+    font-size: .6rem; letter-spacing: .22em; color: var(--gold);
+    text-transform: uppercase; margin-top: 2px;
+  }
+
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--black);
+    font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+    font-weight: 500; position: relative; padding-bottom: 3px;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1px; background: var(--gold);
+    transition: width .3s ease;
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+
+  .lang-select {
+    font-family: 'Inter', sans-serif; font-size: .72rem;
+    border: 1px solid var(--border); background: transparent;
+    padding: 6px 10px; border-radius: 3px; cursor: pointer;
+    color: var(--black); letter-spacing: .06em;
+    outline: none; transition: border-color .2s;
+  }
+  .lang-select:hover { border-color: var(--gold); }
+
+  .nav-cta {
+    background: var(--black); color: var(--ivory);
+    padding: 9px 20px; font-size: .72rem; letter-spacing: .16em;
+    text-transform: uppercase; font-weight: 600; text-decoration: none;
+    transition: background .25s, color .25s;
+    border-radius: 2px;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    width: 24px; height: 1.5px; background: var(--black);
+    display: block; transition: all .3s;
+  }
+
+  /* ── MOBILE NAV ── */
+  .mobile-menu {
+    display: none; position: fixed; inset: 0; background: var(--black);
+    z-index: 200; flex-direction: column; align-items: center; justify-content: center;
+    gap: 32px; opacity: 0; transition: opacity .3s;
+  }
+  .mobile-menu.open { display: flex; opacity: 1; }
+  .mobile-menu a {
+    text-decoration: none; color: var(--ivory);
+    font-family: 'Playfair Display', serif; font-size: 2rem;
+    letter-spacing: .06em; transition: color .2s;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+  .mobile-close {
+    position: absolute; top: 24px; right: 24px;
+    background: none; border: none; color: var(--ivory);
+    font-size: 2rem; cursor: pointer; line-height: 1;
+  }
+  .mobile-lang {
+    margin-top: 8px;
+    font-family: 'Inter', sans-serif; font-size: .8rem;
+    border: 1px solid var(--grey); background: transparent;
+    padding: 8px 14px; color: var(--ivory); cursor: pointer;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 92vh; display: flex; align-items: center;
+    background: linear-gradient(135deg, #0D0D0D 0%, #1a1a1a 50%, #0D0D0D 100%);
+    position: relative; overflow: hidden; padding: 80px clamp(20px,8vw,100px);
+  }
+  .hero-pattern {
+    position: absolute; inset: 0; opacity: .04;
+    background-image: repeating-linear-gradient(
+      45deg, var(--gold) 0, var(--gold) 1px,
+      transparent 0, transparent 50%
+    );
+    background-size: 20px 20px;
+  }
+  .hero-glow {
+    position: absolute; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(201,168,76,.15) 0%, transparent 70%);
+    top: 50%; left: 60%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 680px; }
+  .hero-eyebrow {
+    font-size: .68rem; letter-spacing: .35em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px; opacity: 0;
+    animation: fadeUp .8s ease .4s forwards;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 40px; height: 1px; background: var(--gold);
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem); line-height: 1.07;
+    color: var(--ivory); font-weight: 700;
+    opacity: 0; animation: fadeUp .9s ease .6s forwards;
+  }
+  .hero-title em { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2.2vw, 1.3rem); color: var(--grey);
+    margin-top: 22px; line-height: 1.7; font-weight: 300;
+    opacity: 0; animation: fadeUp .9s ease .85s forwards;
+  }
+  .hero-actions {
+    margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp .9s ease 1.05s forwards;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--black);
+    padding: 14px 34px; font-size: .75rem; letter-spacing: .18em;
+    text-transform: uppercase; font-weight: 700; text-decoration: none;
+    border-radius: 2px; transition: transform .25s, box-shadow .25s;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,168,76,.45); }
+  .btn-outline {
+    border: 1px solid rgba(255,255,255,.3); color: var(--ivory);
+    padding: 14px 34px; font-size: .75rem; letter-spacing: .18em;
+    text-transform: uppercase; font-weight: 500; text-decoration: none;
+    border-radius: 2px; transition: border-color .25s, background .25s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,.08); }
+  .hero-badge {
+    position: absolute; right: clamp(20px,6vw,80px); top: 50%;
+    transform: translateY(-50%);
+    width: 140px; height: 140px; border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    color: var(--gold); animation: spin 20s linear infinite;
+    opacity: 0; animation: fadeIn 1s ease 1.4s forwards, spin 20s linear 2.4s infinite;
+  }
+  .hero-badge span {
+    font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+    line-height: 1.8; animation: spinReverse 20s linear 2.4s infinite;
+  }
+  @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+  @keyframes spinReverse { to { transform: rotate(-360deg); } }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  /* ── GOLD DIVIDER ── */
+  .divider {
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 clamp(20px,8vw,100px); margin: 60px 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-ornament {
+    font-size: 1.1rem; color: var(--gold); letter-spacing: .15em;
+    font-family: 'Playfair Display', serif; white-space: nowrap;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header { text-align: center; margin-bottom: 52px; }
+  .section-eyebrow {
+    font-size: .65rem; letter-spacing: .35em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin-bottom: 12px;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.2;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; color: var(--grey); margin-top: 12px; font-weight: 300;
+  }
+
+  /* ── CATEGORIES ── */
+  .categories { padding: 0 clamp(20px,5vw,80px) 80px; }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .cat-card {
+    position: relative; overflow: hidden; border-radius: 4px;
+    aspect-ratio: 3/4; cursor: pointer;
+    background: var(--off);
+    box-shadow: 0 2px 16px rgba(0,0,0,.06);
+    transition: transform .4s cubic-bezier(.25,.8,.25,1), box-shadow .4s;
+  }
+  .cat-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,.16); }
+  .cat-img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .6s ease; display: block;
+  }
+  .cat-card:hover .cat-img { transform: scale(1.06); }
+  .cat-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.1) 55%, transparent 100%);
+  }
+  .cat-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 28px 24px;
+  }
+  .cat-label {
+    font-size: .62rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold-lt); font-weight: 500; margin-bottom: 6px; display: block;
+  }
+  .cat-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; color: #fff; font-weight: 700; line-height: 1.2;
+  }
+  .cat-desc { font-size: .75rem; color: rgba(255,255,255,.7); margin-top: 6px; line-height: 1.5; }
+  .cat-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 14px; font-size: .65rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--gold); font-weight: 600;
+    text-decoration: none; opacity: 0; transform: translateY(8px);
+    transition: opacity .3s, transform .3s;
+  }
+  .cat-card:hover .cat-cta { opacity: 1; transform: translateY(0); }
+  .cat-cta::after { content: '→'; font-size: .9rem; }
+
+  /* placeholder gradient bg for cat cards */
+  .cat-kids    { background: linear-gradient(135deg,#F5E6D3,#E8C9A0); }
+  .cat-ladies  { background: linear-gradient(135deg,#E8D5C4,#D4A88B); }
+  .cat-western { background: linear-gradient(135deg,#D4C8E8,#B8A0D4); }
+  .cat-tops    { background: linear-gradient(135deg,#C8E8D4,#90C8A8); }
+  .cat-jeans   { background: linear-gradient(135deg,#C4D4E8,#8CA8C8); }
+
+  /* illustrative emoji overlay for placeholder */
+  .cat-emoji {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-60%);
+    font-size: clamp(4rem, 10vw, 7rem); opacity: .35; transition: transform .5s ease, opacity .3s;
+    pointer-events: none;
+  }
+  .cat-card:hover .cat-emoji { transform: translate(-50%,-60%) scale(1.1); opacity: .45; }
+
+  /* ── PRODUCTS ── */
+  .products { background: var(--off); padding: 80px clamp(20px,5vw,80px); }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 28px;
+  }
+  .product-card {
+    background: var(--ivory); border-radius: 4px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    transition: transform .35s ease, box-shadow .35s ease;
+    position: relative;
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(201,168,76,.18), 0 2px 12px rgba(0,0,0,.08);
+  }
+  .product-img-wrap {
+    aspect-ratio: 3/4; background: var(--blush); position: relative; overflow: hidden;
+  }
+  .product-img-wrap .product-emoji {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; opacity: .5;
+  }
+  .product-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--black); color: var(--gold);
+    font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+    padding: 4px 10px; font-weight: 600; border-radius: 2px;
+  }
+  .product-wish {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255,255,255,.9); border: none; border-radius: 50%;
+    width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1rem; transition: background .2s, transform .2s;
+    opacity: 0; transform: translateY(-4px);
+    transition: opacity .3s, transform .3s;
+  }
+  .product-card:hover .product-wish { opacity: 1; transform: translateY(0); }
+  .product-wish:hover { background: var(--gold); transform: scale(1.1) !important; }
+  .product-info { padding: 16px 18px 20px; }
+  .product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 600; line-height: 1.3; margin-bottom: 4px;
+  }
+  .product-cat {
+    font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--grey); margin-bottom: 10px;
+  }
+  .product-price { font-size: 1rem; font-weight: 700; color: var(--black); }
+  .product-price .old { font-weight: 400; color: var(--grey); text-decoration: line-through; font-size: .85rem; margin-left: 6px; }
+  .product-wa {
+    display: flex; align-items: center; gap: 8px; margin-top: 12px;
+    background: #25D366; color: #fff; border: none;
+    padding: 9px 14px; border-radius: 3px; font-size: .68rem;
+    letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
+    cursor: pointer; width: 100%; justify-content: center;
+    transition: background .2s, transform .2s; text-decoration: none;
+  }
+  .product-wa:hover { background: #1da851; transform: translateY(-1px); }
+
+  /* ── WHY US ── */
+  .why { padding: 80px clamp(20px,5vw,80px); }
+  .why-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 32px; margin-top: 52px;
+  }
+  .why-item { text-align: center; }
+  .why-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px; font-size: 1.6rem;
+    box-shadow: 0 4px 20px rgba(201,168,76,.3);
+  }
+  .why-title {
+    font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .why-desc { font-size: .82rem; color: var(--grey); line-height: 1.6; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { background: var(--black); padding: 80px clamp(20px,5vw,80px); }
+  .testimonials .section-title { color: var(--ivory); }
+  .testimonials .section-eyebrow { color: var(--gold); }
+  .testimonials .section-sub { color: var(--grey); }
+  .testi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+    gap: 24px; margin-top: 48px;
+  }
+  .testi-card {
+    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px;
+    padding: 32px 28px; transition: border-color .3s;
+  }
+  .testi-card:hover { border-color: var(--gold); }
+  .testi-stars { color: var(--gold); font-size: 1rem; margin-bottom: 16px; letter-spacing: 3px; }
+  .testi-text {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.05rem;
+    color: rgba(255,255,255,.8); line-height: 1.7; font-style: italic;
+    margin-bottom: 20px;
+  }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--blush));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; color: var(--black);
+  }
+  .testi-name { font-size: .82rem; font-weight: 600; color: var(--ivory); }
+  .testi-loc { font-size: .7rem; color: var(--grey); margin-top: 2px; }
+
+  /* ── LOCATION ── */
+  .location-section { padding: 80px clamp(20px,5vw,80px); }
+  .location-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    align-items: center;
+  }
+  .location-info h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .info-item {
+    display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px;
+  }
+  .info-icon {
+    width: 40px; height: 40px; min-width: 40px; border-radius: 50%;
+    background: var(--gold); display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; color: var(--black);
+  }
+  .info-label { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--grey); margin-bottom: 3px; }
+  .info-val { font-size: .95rem; font-weight: 500; line-height: 1.5; }
+  .info-val a { color: var(--black); text-decoration: none; }
+  .info-val a:hover { color: var(--gold); }
+  .location-map {
+    border-radius: 4px; overflow: hidden; height: 380px;
+    border: 1px solid var(--border); background: var(--off);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+  }
+  .location-map .map-placeholder-icon { font-size: 3rem; }
+  .location-map p { font-size: .85rem; color: var(--grey); text-align: center; padding: 0 24px; }
+  .location-map a {
+    background: var(--black); color: var(--ivory);
+    padding: 10px 22px; border-radius: 3px; font-size: .7rem;
+    letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+    font-weight: 600; transition: background .2s;
+  }
+  .location-map a:hover { background: var(--gold); color: var(--black); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black); color: rgba(255,255,255,.6);
+    padding: 60px clamp(20px,5vw,80px) 30px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px; margin-bottom: 48px;
+  }
+  .footer-brand .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; color: #fff; font-weight: 700; margin-bottom: 8px;
+  }
+  .footer-brand .tagline { font-size: .65rem; letter-spacing: .22em; color: var(--gold); text-transform: uppercase; }
+  .footer-brand p { font-size: .82rem; margin-top: 14px; line-height: 1.7; max-width: 260px; }
+  .footer-brand .social-links { display: flex; gap: 10px; margin-top: 20px; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 50%; border: 1px solid #333;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .9rem; text-decoration: none; transition: border-color .2s, background .2s;
+  }
+  .social-btn:hover { border-color: var(--gold); background: rgba(201,168,76,.15); }
+  .footer-col h4 {
+    font-size: .65rem; letter-spacing: .25em; text-transform: uppercase;
+    color: #fff; font-weight: 600; margin-bottom: 18px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul a {
+    color: rgba(255,255,255,.5); text-decoration: none; font-size: .82rem;
+    transition: color .2s;
+  }
+  .footer-col ul a:hover { color: var(--gold); }
+  .footer-bottom {
+    border-top: 1px solid #222; padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+    font-size: .72rem;
+  }
+  .footer-bottom a { color: var(--gold); text-decoration: none; }
+
+  /* ── WHATSAPP FLOAT ── */
+  .wa-float {
+    position: fixed; bottom: 28px; right: 28px; z-index: 500;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  }
+  .wa-bubble {
+    background: var(--ivory); border: 1px solid var(--border);
+    border-radius: 10px 10px 0 10px; padding: 10px 14px;
+    font-size: .75rem; color: var(--black); line-height: 1.4;
+    box-shadow: 0 4px 20px rgba(0,0,0,.12); max-width: 200px;
+    animation: fadeIn .5s ease 2s both;
+  }
+  .wa-btn {
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25D366; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 24px rgba(37,211,102,.45);
+    text-decoration: none; font-size: 1.7rem;
+    animation: waPulse 2.5s ease-in-out infinite 2.5s;
+    transition: transform .2s;
+  }
+  .wa-btn:hover { transform: scale(1.1); }
+  @keyframes waPulse {
+    0%,100%{ box-shadow: 0 6px 24px rgba(37,211,102,.45); }
+    50%{ box-shadow: 0 6px 36px rgba(37,211,102,.7), 0 0 0 10px rgba(37,211,102,.12); }
+  }
+
+  /* ── CMS DASHBOARD (hidden, toggle) ── */
+  .cms-toggle {
+    position: fixed; bottom: 28px; left: 28px; z-index: 500;
+    background: var(--black); color: var(--gold); border: 1px solid var(--gold);
+    padding: 10px 16px; font-size: .65rem; letter-spacing: .18em;
+    text-transform: uppercase; font-weight: 600; cursor: pointer;
+    border-radius: 3px; transition: background .2s;
+  }
+  .cms-toggle:hover { background: var(--gold); color: var(--black); }
+
+  .cms-panel {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,.85); overflow-y: auto;
+  }
+  .cms-panel.open { display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; }
+  .cms-box {
+    background: var(--ivory); border-radius: 6px; max-width: 720px;
+    width: 100%; padding: 40px; position: relative;
+  }
+  .cms-close-btn {
+    position: absolute; top: 16px; right: 20px; background: none;
+    border: none; font-size: 1.6rem; cursor: pointer; color: var(--grey);
+  }
+  .cms-title {
+    font-family: 'Playfair Display', serif; font-size: 1.6rem;
+    margin-bottom: 8px; font-weight: 700;
+  }
+  .cms-sub { font-size: .82rem; color: var(--grey); margin-bottom: 28px; }
+  .cms-tabs { display: flex; gap: 0; margin-bottom: 28px; border-bottom: 2px solid var(--border); }
+  .cms-tab {
+    padding: 10px 20px; font-size: .75rem; letter-spacing: .12em;
+    text-transform: uppercase; font-weight: 600; cursor: pointer;
+    border: none; background: none; color: var(--grey);
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+    transition: color .2s, border-color .2s;
+  }
+  .cms-tab.active { color: var(--black); border-bottom-color: var(--gold); }
+  .cms-pane { display: none; }
+  .cms-pane.active { display: block; }
+  .cms-field { margin-bottom: 18px; }
+  .cms-label { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block; }
+  .cms-input, .cms-select, .cms-textarea {
+    width: 100%; padding: 11px 14px; border: 1px solid var(--border);
+    border-radius: 3px; font-family: 'Inter', sans-serif; font-size: .88rem;
+    background: #fff; color: var(--black); outline: none;
+    transition: border-color .2s;
+  }
+  .cms-input:focus, .cms-select:focus, .cms-textarea:focus { border-color: var(--gold); }
+  .cms-textarea { resize: vertical; min-height: 80px; }
+  .cms-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cms-btn {
+    background: var(--black); color: var(--ivory); border: none;
+    padding: 12px 26px; font-size: .72rem; letter-spacing: .16em;
+    text-transform: uppercase; font-weight: 700; cursor: pointer;
+    border-radius: 3px; transition: background .2s;
+  }
+  .cms-btn:hover { background: var(--gold); color: var(--black); }
+  .cms-product-list { margin-top: 20px; }
+  .cms-product-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px solid var(--border); gap: 12px;
+  }
+  .cms-product-item .name { font-weight: 600; font-size: .88rem; }
+  .cms-product-item .cat { font-size: .7rem; color: var(--grey); margin-top: 2px; }
+  .cms-actions { display: flex; gap: 8px; }
+  .cms-edit, .cms-delete {
+    padding: 5px 12px; font-size: .65rem; letter-spacing: .1em;
+    text-transform: uppercase; font-weight: 600; border: none;
+    border-radius: 2px; cursor: pointer;
+  }
+  .cms-edit { background: var(--off); color: var(--black); }
+  .cms-delete { background: #fee2e2; color: #991b1b; }
+  .cms-note {
+    background: linear-gradient(135deg, rgba(201,168,76,.1), rgba(201,168,76,.05));
+    border: 1px solid rgba(201,168,76,.3); border-radius: 4px;
+    padding: 14px 16px; font-size: .8rem; color: var(--black);
+    margin-bottom: 20px; line-height: 1.6;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .hero-badge { display: none; }
+    .location-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .cms-row { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-outline { text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; top: 90px; right: 24px; z-index: 2000;
+    background: var(--black); color: var(--ivory);
+    padding: 12px 20px; border-radius: 4px; border-left: 3px solid var(--gold);
+    font-size: .8rem; opacity: 0; transform: translateX(20px);
+    transition: opacity .3s, transform .3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(0); }
+
+  /* ── BACK TO TOP ── */
+  .back-top {
+    position: fixed; bottom: 100px; right: 28px; z-index: 500;
+    background: var(--ivory); border: 1px solid var(--border);
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; opacity: 0; transition: opacity .3s, background .2s;
+    font-size: 1rem; box-shadow: 0 2px 12px rgba(0,0,0,.1);
+  }
+  .back-top.visible { opacity: 1; }
+  .back-top:hover { background: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-text">✦ ABHAY COLLECTION ✦</div>
+</div>
+
+<!-- ANNOUNCEMENT -->
+<div class="announcement" data-translate="announcement">
+  ✦ &nbsp; Free Home Delivery in Dadri &nbsp; | &nbsp; WhatsApp for Custom Orders: +91-9953807948 &nbsp; | &nbsp; New Arrivals Every Week &nbsp; ✦
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-logo">
+    <span class="brand">Abhay Collection</span>
+    <span class="tagline">Premium Boutique · Dadri</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#categories" data-translate="nav-categories">Categories</a></li>
+    <li><a href="#new-arrivals" data-translate="nav-arrivals">New Arrivals</a></li>
+    <li><a href="#about" data-translate="nav-about">About</a></li>
+    <li><a href="#contact" data-translate="nav-contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <select class="lang-select" id="langSelect" onchange="setLang(this.value)">
+      <option value="en">🌐 English</option>
+      <option value="hi">🇮🇳 हिंदी</option>
+    </select>
+    <a href="https://wa.me/919953807948?text=Hello!%20I%20am%20interested%20in%20your%20collection." class="nav-cta" target="_blank" data-translate="nav-order">Order via WhatsApp</a>
+  </div>
+  <button class="hamburger" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
+  <a href="#categories" onclick="document.getElementById('mobileMenu').classList.remove('open')" data-translate="nav-categories">Categories</a>
+  <a href="#new-arrivals" onclick="document.getElementById('mobileMenu').classList.remove('open')" data-translate="nav-arrivals">New Arrivals</a>
+  <a href="#about" onclick="document.getElementById('mobileMenu').classList.remove('open')" data-translate="nav-about">About</a>
+  <a href="#contact" onclick="document.getElementById('mobileMenu').classList.remove('open')" data-translate="nav-contact">Contact</a>
+  <a href="https://wa.me/919953807948" target="_blank" onclick="document.getElementById('mobileMenu').classList.remove('open')">📱 WhatsApp</a>
+  <select class="mobile-lang" onchange="setLang(this.value)">
+    <option value="en">🌐 English</option>
+    <option value="hi">🇮🇳 हिंदी</option>
+  </select>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" data-translate="hero-eyebrow">Dadri's Finest Boutique</div>
+    <h1 class="hero-title" data-translate="hero-title">Dress with <em>Elegance,</em><br/>Live in <em>Style</em></h1>
+    <p class="hero-sub" data-translate="hero-sub">Curated collections for every woman and child — from vibrant Indian dresses to contemporary western wear, all under one roof in the heart of Dadri.</p>
+    <div class="hero-actions">
+      <a href="#categories" class="btn-primary" data-translate="hero-cta1">Explore Collections</a>
+      <a href="https://wa.me/919953807948?text=Hi!%20I%20want%20to%20see%20your%20latest%20collection." class="btn-outline" target="_blank" data-translate="hero-cta2">Shop via WhatsApp</a>
+    </div>
+  </div>
+  <div class="hero-badge">
+    <span>Since&nbsp;2010 · Premium · Quality · Dadri · Since&nbsp;2010 ·</span>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider reveal">
+  <div class="divider-line"></div>
+  <div class="divider-ornament">✦ Our Collections ✦</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categories">
+  <div class="section-header reveal">
+    <span class="section-eyebrow" data-translate="cat-eyebrow">Shop by Category</span>
+    <h2 class="section-title" data-translate="cat-title">Find Your <em>Perfect Look</em></h2>
+    <p class="section-sub" data-translate="cat-sub">From adorable kids' outfits to stylish ladies' wear — handpicked for every occasion.</p>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card cat-kids reveal reveal-delay-1">
+      <div class="cat-emoji">👗</div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-label" data-translate="cat-kids-label">Full Range Available</span>
+        <div class="cat-name" data-translate="cat-kids-name">Kids Wear</div>
+        <div class="cat-desc" data-translate="cat-kids-desc">Frocks, ethnic sets, western outfits, casual tees & more for boys and girls.</div>
+        <a href="https://wa.me/919953807948?text=I%20am%20interested%20in%20Kids%20Wear%20collection." class="cat-cta" target="_blank" data-translate="cat-browse">Browse →</a>
+      </div>
+    </div>
+    <div class="cat-card cat-ladies reveal reveal-delay-2">
+      <div class="cat-emoji">👘</div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-label" data-translate="cat-ladies-label">Readymade Suits · Indian</span>
+        <div class="cat-name" data-translate="cat-ladies-name">Ladies Indian Wear</div>
+        <div class="cat-desc" data-translate="cat-ladies-desc">Gorgeous readymade suits, salwar kameez, anarkalis & traditional Indian dresses.</div>
+        <a href="https://wa.me/919953807948?text=I%20want%20to%20see%20Ladies%20Indian%20Wear." class="cat-cta" target="_blank" data-translate="cat-browse">Browse →</a>
+      </div>
+    </div>
+    <div class="cat-card cat-western reveal reveal-delay-3">
+      <div class="cat-emoji">👚</div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-label" data-translate="cat-western-label">Trending Styles</span>
+        <div class="cat-name" data-translate="cat-western-name">Ladies Western Wear</div>
+        <div class="cat-desc" data-translate="cat-western-desc">Contemporary dresses, coord sets, shirts & stylish western outfits for modern women.</div>
+        <a href="https://wa.me/919953807948?text=Show%20me%20Ladies%20Western%20Wear." class="cat-cta" target="_blank" data-translate="cat-browse">Browse →</a>
+      </div>
+    </div>
+    <div class="cat-card cat-tops reveal reveal-delay-2">
+      <div class="cat-emoji">👕</div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-label" data-translate="cat-tops-label">Casual · Formal</span>
+        <div class="cat-name" data-translate="cat-tops-name">Tops & T-Shirts</div>
+        <div class="cat-desc" data-translate="cat-tops-desc">Wide range of stylish tops, t-shirts & shirts for every mood and occasion.</div>
+        <a href="https://wa.me/919953807948?text=I%20want%20to%20see%20Tops%20and%20T-Shirts." class="cat-cta" target="_blank" data-translate="cat-browse">Browse →</a>
+      </div>
+    </div>
+    <div class="cat-card cat-jeans reveal reveal-delay-3">
+      <div class="cat-emoji">👖</div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <span class="cat-label" data-translate="cat-jeans-label">All Sizes Available</span>
+        <div class="cat-name" data-translate="cat-jeans-name">Jeans & Bottoms</div>
+        <div class="cat-desc" data-translate="cat-jeans-desc">High-waist, slim-fit & regular jeans — premium denim for the modern woman.</div>
+        <a href="https://wa.me/919953807948?text=I%20want%20to%20see%20Jeans%20collection." class="cat-cta" target="_blank" data-translate="cat-browse">Browse →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW ARRIVALS -->
+<section class="products" id="new-arrivals">
+  <div class="section-header reveal">
+    <span class="section-eyebrow" data-translate="arrivals-eyebrow">Just Arrived</span>
+    <h2 class="section-title" data-translate="arrivals-title">New <em>Arrivals</em></h2>
+    <p class="section-sub" data-translate="arrivals-sub">Fresh styles added weekly — be the first to grab yours!</p>
+  </div>
+  <div class="product-grid" id="productGrid">
+    <!-- Products rendered by JS -->
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why" id="about">
+  <div class="section-header reveal">
+    <span class="section-eyebrow" data-translate="why-eyebrow">Why Abhay Collection</span>
+    <h2 class="section-title" data-translate="why-title">Quality You Can <em>Trust</em></h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-item reveal reveal-delay-1">
+      <div class="why-icon">✨</div>
+      <div class="why-title" data-translate="why1-title">Premium Quality</div>
+      <div class="why-desc" data-translate="why1-desc">Every piece in our collection is carefully selected for its fabric quality, finish, and style.</div>
+    </div>
+    <div class="why-item reveal reveal-delay-2">
+      <div class="why-icon">💰</div>
+      <div class="why-title" data-translate="why2-title">Best Prices</div>
+      <div class="why-desc" data-translate="why2-desc">Boutique quality at affordable prices. We believe fashion shouldn't break the bank.</div>
+    </div>
+    <div class="why-item reveal reveal-delay-3">
+      <div class="why-icon">🚚</div>
+      <div class="why-title" data-translate="why3-title">Home Delivery</div>
+      <div class="why-desc" data-translate="why3-desc">Free delivery within Dadri and surrounding areas. Order via WhatsApp — it's that easy.</div>
+    </div>
+    <div class="why-item reveal reveal-delay-4">
+      <div class="why-icon">💬</div>
+      <div class="why-title" data-translate="why4-title">Personal Service</div>
+      <div class="why-desc" data-translate="why4-desc">Chat directly with us on WhatsApp for styling advice, size help, and custom orders.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider reveal">
+  <div class="divider-line"></div>
+  <div class="divider-ornament">✦ What Our Customers Say ✦</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header reveal">
+    <span class="section-eyebrow">Customer Love</span>
+    <h2 class="section-title" data-translate="testi-title">Trusted by <em>Thousands</em></h2>
+    <p class="section-sub">Our customers keep coming back — and they tell their friends too.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Bahut achha collection hai. Maine apni beti ke liye kids wear liye aur quality ekdum top-class thi. Pehli baar gaye aur ab regular customer ban gaye!"</div>
+      <div class="testi-author">
+        <div class="testi-avatar">P</div>
+        <div><div class="testi-name">Priya Sharma</div><div class="testi-loc">Dadri, UP</div></div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"The readymade suits here are absolutely gorgeous. Perfect stitching, beautiful fabrics, and the prices are so reasonable. Highly recommend Abhay Collection!"</div>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div><div class="testi-name">Anita Verma</div><div class="testi-loc">Greater Noida</div></div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-3">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"WhatsApp pe order kiya aur same day delivery mili! Western dresses ki variety kafi achhi hai. Bilkul boutique jaisi feeling — local shop mein premium experience."</div>
+      <div class="testi-author">
+        <div class="testi-avatar">S</div>
+        <div><div class="testi-name">Sunita Gupta</div><div class="testi-loc">Dadri</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION / CONTACT -->
+<section class="location-section" id="contact">
+  <div class="location-grid">
+    <div class="location-info reveal">
+      <div class="section-eyebrow" data-translate="contact-eyebrow">Find Us</div>
+      <h3 data-translate="contact-title">Visit Our Store or<br/>Order Online</h3>
+      <div class="info-item">
+        <div class="info-icon">📍</div>
+        <div>
+          <div class="info-label" data-translate="label-address">Store Address</div>
+          <div class="info-val">Abhay Collection, Dadri,<br/>Gautam Buddha Nagar,<br/>Uttar Pradesh – 203207</div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📱</div>
+        <div>
+          <div class="info-label" data-translate="label-phone">Phone & WhatsApp</div>
+          <div class="info-val"><a href="tel:+919953807948">+91-9953807948</a></div>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">🕐</div>
+        <div>
+          <div class="info-label" data-translate="label-hours">Store Hours</div>
+          <div class="info-val" data-translate="val-hours">Mon – Sun: 10:00 AM – 9:00 PM</div>
+        </div>
+      </div>
+      <div style="margin-top:28px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="https://wa.me/919953807948" class="btn-primary" target="_blank" data-translate="cta-wa">💬 WhatsApp Us</a>
+        <a href="tel:+919953807948" class="btn-outline" style="color:var(--black);border-color:var(--border);" data-translate="cta-call">📞 Call Now</a>
+      </div>
+    </div>
+    <div class="location-map reveal reveal-delay-2">
+      <div class="map-placeholder-icon">🗺️</div>
+      <p>Abhay Collection, Dadri, Gautam Buddha Nagar, UP – 203207</p>
+      <a href="https://www.google.com/maps/search/Abhay+Collection+Dadri+Gautam+Buddha+Nagar" target="_blank">Open in Google Maps →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="brand">Abhay Collection</div>
+      <div class="tagline">Premium Boutique · Dadri</div>
+      <p>Your neighbourhood boutique bringing you the finest in ladies' and kids' fashion — quality, style, and warmth since day one.</p>
+      <div class="social-links">
+        <a class="social-btn" href="https://wa.me/919953807948" target="_blank" title="WhatsApp">📱</a>
+        <a class="social-btn" href="#" title="Instagram">📸</a>
+        <a class="social-btn" href="#" title="Facebook">👍</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4 data-translate="footer-shop">Shop</h4>
+      <ul>
+        <li><a href="#" data-translate="fc-kids">Kids Wear</a></li>
+        <li><a href="#" data-translate="fc-indian">Ladies Indian Wear</a></li>
+        <li><a href="#" data-translate="fc-western">Ladies Western Wear</a></li>
+        <li><a href="#" data-translate="fc-tops">Tops & T-Shirts</a></li>
+        <li><a href="#" data-translate="fc-jeans">Jeans & Bottoms</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-translate="footer-info">Information</h4>
+      <ul>
+        <li><a href="#about" data-translate="fi-about">About Us</a></li>
+        <li><a href="#contact" data-translate="fi-contact">Contact</a></li>
+        <li><a href="#" data-translate="fi-returns">Exchange Policy</a></li>
+        <li><a href="#" data-translate="fi-privacy">Privacy Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-translate="footer-contact">Contact</h4>
+      <ul>
+        <li><a href="tel:+919953807948">+91-9953807948</a></li>
+        <li><a href="https://wa.me/919953807948" target="_blank">WhatsApp Chat</a></li>
+        <li><a href="#">Dadri, UP 203207</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Abhay Collection. All rights reserved.</span>
+    <span>Made with ♥ in Dadri, UP</span>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<div class="wa-float">
+  <div class="wa-bubble" data-translate="wa-bubble">👋 Hi! Need help choosing? Chat with us!</div>
+  <a href="https://wa.me/919953807948?text=Hello!%20I%20visited%20your%20website%20and%20want%20to%20know%20more%20about%20your%20collection." class="wa-btn" target="_blank" title="Chat on WhatsApp">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<!-- CMS TOGGLE -->
+<button class="cms-toggle" onclick="document.getElementById('cmsPanel').classList.add('open')">⚙ Manage Store</button>
+
+<!-- CMS PANEL -->
+<div class="cms-panel" id="cmsPanel">
+  <div class="cms-box">
+    <button class="cms-close-btn" onclick="document.getElementById('cmsPanel').classList.remove('open')">✕</button>
+    <div class="cms-title">🛍 Store Dashboard</div>
+    <div class="cms-sub">Manage your products and store content — no coding needed.</div>
+    <div class="cms-note">
+      💡 <strong>Tip:</strong> This panel is your store's CMS. Add products, set prices, and manage your catalogue. All changes are saved locally. For a full backend with cloud storage, we recommend connecting this site to <strong>Supabase</strong> or <strong>Firebase</strong> — ask your developer to set it up once!
+    </div>
+    <div class="cms-tabs">
+      <button class="cms-tab active" onclick="switchCmsTab('add',this)">➕ Add Product</button>
+      <button class="cms-tab" onclick="switchCmsTab('list',this)">📋 All Products</button>
+      <button class="cms-tab" onclick="switchCmsTab('settings',this)">⚙ Store Settings</button>
+    </div>
+
+    <!-- ADD PRODUCT -->
+    <div class="cms-pane active" id="pane-add">
+      <div class="cms-row">
+        <div class="cms-field">
+          <label class="cms-label">Product Name</label>
+          <input class="cms-input" id="p-name" placeholder="e.g. Girls Floral Frock" />
+        </div>
+        <div class="cms-field">
+          <label class="cms-label">Category</label>
+          <select class="cms-select" id="p-cat">
+            <option value="Kids Wear">Kids Wear</option>
+            <option value="Ladies Indian Wear">Ladies Indian Wear</option>
+            <option value="Ladies Western Wear">Ladies Western Wear</option>
+            <option value="Tops & T-Shirts">Tops & T-Shirts</option>
+            <option value="Jeans & Bottoms">Jeans & Bottoms</option>
+          </select>
+        </div>
+      </div>
+      <div class="cms-row">
+        <div class="cms-field">
+          <label class="cms-label">Price (₹)</label>
+          <input class="cms-input" id="p-price" type="number" placeholder="e.g. 599" />
+        </div>
+        <div class="cms-field">
+          <label class="cms-label">Original Price (₹) — optional</label>
+          <input class="cms-input" id="p-old" type="number" placeholder="e.g. 899" />
+        </div>
+      </div>
+      <div class="cms-field">
+        <label class="cms-label">Description</label>
+        <textarea class="cms-textarea" id="p-desc" placeholder="Brief product description..."></textarea>
+      </div>
+      <div class="cms-row">
+        <div class="cms-field">
+          <label class="cms-label">Badge (e.g. New, Sale, Hot)</label>
+          <input class="cms-input" id="p-badge" placeholder="New Arrival" />
+        </div>
+        <div class="cms-field">
+          <label class="cms-label">Emoji Icon</label>
+          <input class="cms-input" id="p-emoji" placeholder="👗" />
+        </div>
+      </div>
+      <button class="cms-btn" onclick="addProduct()">Save & Publish Product</button>
+    </div>
+
+    <!-- PRODUCT LIST -->
+    <div class="cms-pane" id="pane-list">
+      <div class="cms-product-list" id="cmsList"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="cms-pane" id="pane-settings">
+      <div class="cms-field">
+        <label class="cms-label">Shop Name</label>
+        <input class="cms-input" value="Abhay Collection" />
+      </div>
+      <div class="cms-field">
+        <label class="cms-label">WhatsApp Number</label>
+        <input class="cms-input" value="+91-9953807948" />
+      </div>
+      <div class="cms-field">
+        <label class="cms-label">Announcement Bar Text</label>
+        <input class="cms-input" value="Free Home Delivery in Dadri | WhatsApp for Custom Orders" />
+      </div>
+      <div class="cms-field">
+        <label class="cms-label">Store Tagline</label>
+        <input class="cms-input" value="Dress with Elegance, Live in Style" />
+      </div>
+      <button class="cms-btn" onclick="showToast('Settings saved! Connect a backend to persist these.')">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── TRANSLATIONS ── */
+const translations = {
+  en: {
+    "announcement": "✦ Free Home Delivery in Dadri | WhatsApp for Custom Orders: +91-9953807948 | New Arrivals Every Week ✦",
+    "nav-categories": "Categories", "nav-arrivals": "New Arrivals", "nav-about": "About", "nav-contact": "Contact",
+    "nav-order": "Order via WhatsApp",
+    "hero-eyebrow": "Dadri's Finest Boutique",
+    "hero-title": "Dress with <em>Elegance,</em><br/>Live in <em>Style</em>",
+    "hero-sub": "Curated collections for every woman and child — from vibrant Indian dresses to contemporary western wear, all under one roof in the heart of Dadri.",
+    "hero-cta1": "Explore Collections", "hero-cta2": "Shop via WhatsApp",
+    "cat-eyebrow": "Shop by Category", "cat-title": "Find Your <em>Perfect Look</em>",
+    "cat-sub": "From adorable kids' outfits to stylish ladies' wear — handpicked for every occasion.",
+    "cat-kids-label": "Full Range Available", "cat-kids-name": "Kids Wear",
+    "cat-kids-desc": "Frocks, ethnic sets, western outfits, casual tees & more for boys and girls.",
+    "cat-ladies-label": "Readymade Suits · Indian", "cat-ladies-name": "Ladies Indian Wear",
+    "cat-ladies-desc": "Gorgeous readymade suits, salwar kameez, anarkalis & traditional Indian dresses.",
+    "cat-western-label": "Trending Styles", "cat-western-name": "Ladies Western Wear",
+    "cat-western-desc": "Contemporary dresses, coord sets, shirts & stylish western outfits for modern women.",
+    "cat-tops-label": "Casual · Formal", "cat-tops-name": "Tops & T-Shirts",
+    "cat-tops-desc": "Wide range of stylish tops, t-shirts & shirts for every mood and occasion.",
+    "cat-jeans-label": "All Sizes Available", "cat-jeans-name": "Jeans & Bottoms",
+    "cat-jeans-desc": "High-waist, slim-fit & regular jeans — premium denim for the modern woman.",
+    "cat-browse": "Browse",
+    "arrivals-eyebrow": "Just Arrived", "arrivals-title": "New <em>Arrivals</em>",
+    "arrivals-sub": "Fresh styles added weekly — be the first to grab yours!",
+    "why-eyebrow": "Why Abhay Collection", "why-title": "Quality You Can <em>Trust</em>",
+    "why1-title": "Premium Quality", "why1-desc": "Every piece in our collection is carefully selected for its fabric quality, finish, and style.",
+    "why2-title": "Best Prices", "why2-desc": "Boutique quality at affordable prices. We believe fashion shouldn't break the bank.",
+    "why3-title": "Home Delivery", "why3-desc": "Free delivery within Dadri and surrounding areas. Order via WhatsApp — it's that easy.",
+    "why4-title": "Personal Service", "why4-desc": "Chat directly with us on WhatsApp for styling advice, size help, and custom orders.",
+    "testi-title": "Trusted by <em>Thousands</em>",
+    "contact-eyebrow": "Find Us", "contact-title": "Visit Our Store or<br/>Order Online",
+    "label-address": "Store Address", "label-phone": "Phone & WhatsApp", "label-hours": "Store Hours",
+    "val-hours": "Mon – Sun: 10:00 AM – 9:00 PM",
+    "cta-wa": "💬 WhatsApp Us", "cta-call": "📞 Call Now",
+    "footer-shop": "Shop", "footer-info": "Information", "footer-contact": "Contact",
+    "fc-kids": "Kids Wear", "fc-indian": "Ladies Indian Wear", "fc-western": "Ladies Western Wear",
+    "fc-tops": "Tops & T-Shirts", "fc-jeans": "Jeans & Bottoms",
+    "fi-about": "About Us", "fi-contact": "Contact", "fi-returns": "Exchange Policy", "fi-privacy": "Privacy Policy",
+    "wa-bubble": "👋 Hi! Need help choosing? Chat with us!"
+  },
+  hi: {
+    "announcement": "✦ दादरी में मुफ़्त होम डिलीवरी | WhatsApp पर ऑर्डर करें: +91-9953807948 | हर हफ्ते नए कपड़े ✦",
+    "nav-categories": "श्रेणियाँ", "nav-arrivals": "नई एंट्री", "nav-about": "हमारे बारे में", "nav-contact": "संपर्क",
+    "nav-order": "WhatsApp पर ऑर्डर करें",
+    "hero-eyebrow": "दादरी की प्रीमियम बुटीक",
+    "hero-title": "<em>शान</em> से पहनिए,<br/><em>स्टाइल</em> में जीएं",
+    "hero-sub": "महिलाओं और बच्चों के लिए बेहतरीन कलेक्शन — भारतीय सूट से लेकर वेस्टर्न ड्रेस तक, सब कुछ एक ही जगह।",
+    "hero-cta1": "कलेक्शन देखें", "hero-cta2": "WhatsApp पर खरीदें",
+    "cat-eyebrow": "श्रेणी अनुसार खरीदें", "cat-title": "अपना <em>परफेक्ट लुक</em> पाएं",
+    "cat-sub": "बच्चों के कपड़े से लेकर महिलाओं के ड्रेस तक — हर अवसर के लिए।",
+    "cat-kids-label": "पूरी वैरायटी उपलब्ध", "cat-kids-name": "बच्चों के कपड़े",
+    "cat-kids-desc": "फ्रॉक, एथनिक सेट, वेस्टर्न आउटफिट, कैजुअल टीज़ — लड़के और लड़कियों दोनों के लिए।",
+    "cat-ladies-label": "रेडीमेड सूट · इंडियन", "cat-ladies-name": "महिला इंडियन वेयर",
+    "cat-ladies-desc": "खूबसूरत रेडीमेड सूट, सलवार कमीज, अनारकली और पारंपरिक भारतीय ड्रेस।",
+    "cat-western-label": "ट्रेंडिंग स्टाइल", "cat-western-name": "महिला वेस्टर्न वेयर",
+    "cat-western-desc": "कन्टेम्पोरेरी ड्रेस, कोर्ड सेट, शर्ट और स्टाइलिश वेस्टर्न आउटफिट।",
+    "cat-tops-label": "कैजुअल · फॉर्मल", "cat-tops-name": "टॉप्स और टी-शर्ट",
+    "cat-tops-desc": "हर मूड और अवसर के लिए स्टाइलिश टॉप्स, टी-शर्ट और शर्ट की बड़ी वैरायटी।",
+    "cat-jeans-label": "सभी साइज़ उपलब्ध", "cat-jeans-name": "जींस और बॉटम्स",
+    "cat-jeans-desc": "हाई-वेस्ट, स्लिम-फिट और रेगुलर जींस — आधुनिक महिलाओं के लिए प्रीमियम डेनिम।",
+    "cat-browse": "देखें",
+    "arrivals-eyebrow": "अभी आया", "arrivals-title": "नई <em>एंट्री</em>",
+    "arrivals-sub": "हर हफ्ते नए स्टाइल — सबसे पहले आप खरीदें!",
+    "why-eyebrow": "Abhay Collection क्यों?", "why-title": "भरोसेमंद <em>क्वालिटी</em>",
+    "why1-title": "प्रीमियम क्वालिटी", "why1-desc": "हर पीस को कपड़े की क्वालिटी, फिनिश और स्टाइल के आधार पर चुना जाता है।",
+    "why2-title": "बेस्ट कीमत", "why2-desc": "बुटीक क्वालिटी, किफायती दाम। हम मानते हैं कि फैशन महंगा नहीं होना चाहिए।",
+    "why3-title": "होम डिलीवरी", "why3-desc": "दादरी और आसपास के इलाकों में मुफ़्त डिलीवरी। WhatsApp पर ऑर्डर करें — बस इतना काफी है।",
+    "why4-title": "पर्सनल सर्विस", "why4-desc": "साइज़, स्टाइल सलाह या कस्टम ऑर्डर के लिए सीधे WhatsApp पर बात करें।",
+    "testi-title": "हजारों का <em>भरोसा</em>",
+    "contact-eyebrow": "हमें खोजें", "contact-title": "हमारी दुकान पर आएं या<br/>ऑनलाइन ऑर्डर करें",
+    "label-address": "दुकान का पता", "label-phone": "फोन और WhatsApp", "label-hours": "दुकान का समय",
+    "val-hours": "सोम – रवि: सुबह 10 बजे – रात 9 बजे",
+    "cta-wa": "💬 WhatsApp करें", "cta-call": "📞 अभी कॉल करें",
+    "footer-shop": "खरीदें", "footer-info": "जानकारी", "footer-contact": "संपर्क",
+    "fc-kids": "बच्चों के कपड़े", "fc-indian": "महिला इंडियन वेयर", "fc-western": "महिला वेस्टर्न वेयर",
+    "fc-tops": "टॉप्स और टी-शर्ट", "fc-jeans": "जींस और बॉटम्स",
+    "fi-about": "हमारे बारे में", "fi-contact": "संपर्क", "fi-returns": "एक्सचेंज पॉलिसी", "fi-privacy": "प्राइवेसी पॉलिसी",
+    "wa-bubble": "👋 नमस्ते! कुछ चाहिए? हमसे बात करें!"
+  }
+};
+
+function setLang(lang) {
+  document.querySelectorAll('[data-translate]').forEach(el => {
+    const key = el.getAttribute('data-translate');
+    if (translations[lang] && translations[lang][key]) {
+      el.innerHTML = translations[lang][key];
+    }
+  });
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
+}
+
+/* ── PRODUCTS ── */
+const defaultProducts = [
+  { id:1, name:"Girls Floral Frock", cat:"Kids Wear", price:349, old:599, badge:"New", emoji:"👗", desc:"Beautiful floral print frock for girls aged 2–10." },
+  { id:2, name:"Readymade Salwar Suit", cat:"Ladies Indian Wear", price:799, old:1299, badge:"Bestseller", emoji:"👘", desc:"Premium cotton salwar suit — vibrant colors, perfect fit." },
+  { id:3, name:"Western Coord Set", cat:"Ladies Western Wear", price:649, old:999, badge:"Hot", emoji:"👙", desc:"Trendy coord set — perfect for casual outings & college." },
+  { id:4, name:"Printed Crop Top", cat:"Tops & T-Shirts", price:249, old:449, badge:"Sale", emoji:"👚", desc:"Soft cotton printed crop top — available in 10 colors." },
+  { id:5, name:"High-Waist Slim Jeans", cat:"Jeans & Bottoms", price:499, old:799, badge:"New", emoji:"👖", desc:"Premium stretch denim — flattering fit for all body types." },
+  { id:6, name:"Boys Ethnic Kurta Set", cat:"Kids Wear", price:399, old:699, badge:"New", emoji:"🧒", desc:"Festive-ready kurta pajama set for boys aged 2–12." },
+  { id:7, name:"Anarkali Dress", cat:"Ladies Indian Wear", price:899, old:1499, badge:"Premium", emoji:"🥻", desc:"Elegant anarkali with intricate embroidery — occasion-ready." },
+  { id:8, name:"Denim Shirt", cat:"Tops & T-Shirts", price:349, old:599, badge:"New", emoji:"👔", desc:"Classic denim shirt — pair with jeans or skirts effortlessly." },
+];
+
+function getProducts() {
+  try {
+    const saved = localStorage.getItem('ac_products');
+    return saved ? JSON.parse(saved) : defaultProducts;
+  } catch { return defaultProducts; }
+}
+function saveProducts(p) { localStorage.setItem('ac_products', JSON.stringify(p)); }
+
+function renderProducts() {
+  const products = getProducts();
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = products.map(p => `
+    <div class="product-card reveal">
+      <div class="product-img-wrap">
+        <div class="product-emoji">${p.emoji || '👗'}</div>
+        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+        <button class="product-wish" onclick="showToast('Added to wishlist! ❤️')" title="Save">♡</button>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">${p.cat}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">₹${p.price}${p.old ? `<span class="old">₹${p.old}</span>` : ''}</div>
+        <a class="product-wa" href="https://wa.me/919953807948?text=Hi!%20I%20want%20to%20order%20${encodeURIComponent(p.name)}%20(₹${p.price})" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Order Now
+        </a>
+      </div>
+    </div>
+  `).join('');
+  observeReveal();
+}
+
+function addProduct() {
+  const name = document.getElementById('p-name').value.trim();
+  const cat = document.getElementById('p-cat').value;
+  const price = parseInt(document.getElementById('p-price').value);
+  const old = parseInt(document.getElementById('p-old').value) || null;
+  const desc = document.getElementById('p-desc').value.trim();
+  const badge = document.getElementById('p-badge').value.trim();
+  const emoji = document.getElementById('p-emoji').value.trim() || '👗';
+  if (!name || !price) { showToast('Please enter product name and price.'); return; }
+  const products = getProducts();
+  products.unshift({ id: Date.now(), name, cat, price, old, desc, badge, emoji });
+  saveProducts(products);
+  renderProducts();
+  renderCmsList();
+  document.getElementById('p-name').value = '';
+  document.getElementById('p-price').value = '';
+  document.getElementById('p-old').value = '';
+  document.getElementById('p-desc').value = '';
+  document.getElementById('p-badge').value = '';
+  document.getElementById('p-emoji').value = '';
+  showToast('✅ Product published successfully!');
+  document.getElementById('cmsPanel').classList.remove('open');
+}
+
+function deleteProduct(id) {
+  const products = getProducts().filter(p => p.id !== id);
+  saveProducts(products);
+  renderProducts();
+  renderCmsList();
+  showToast('Product deleted.');
+}
+
+function renderCmsList() {
+  const products = getProducts();
+  document.getElementById('cmsList').innerHTML = products.length === 0
+    ? '<p style="color:var(--grey);font-size:.85rem;padding:20px 0">No products yet. Add your first product!</p>'
+    : products.map(p => `
+      <div class="cms-product-item">
+        <div>
+          <div class="name">${p.emoji} ${p.name}</div>
+          <div class="cat">${p.cat} · ₹${p.price}</div>
+        </div>
+        <div class="cms-actions">
+          <button class="cms-delete" onclick="deleteProduct(${p.id})">Delete</button>
+        </div>
+      </div>
+    `).join('');
+}
+
+/* ── CMS TABS ── */
+function switchCmsTab(name, el) {
+  document.querySelectorAll('.cms-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cms-pane').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pane-' + name).classList.add('active');
+  if (name === 'list') renderCmsList();
+}
+
+/* ── SCROLL REVEAL ── */
+function observeReveal() {
+  const els = document.querySelectorAll('.reveal:not(.observed)');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(el => { io.observe(el); el.classList.add('observed'); });
+}
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+  document.getElementById('backTop').classList.toggle('visible', window.scrollY > 400);
+});
+
+/* ── TOAST ── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ── LOADER ── */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1200);
+});
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  renderProducts();
+  observeReveal();
+  const savedLang = localStorage.getItem('lang') || 'en';
+  document.querySelectorAll('#langSelect, .mobile-lang').forEach(s => s.value = savedLang);
+  if (savedLang !== 'en') setLang(savedLang);
+});
+</script>
+</body>
+</html>
